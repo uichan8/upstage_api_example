@@ -2,6 +2,9 @@
 
 Upstage AI API를 사용한 예제 프로젝트입니다.
 
+공식 사이트 : https://upstage.ai/
+api 문서 : https://console.upstage.ai/docs/getting-started
+
 ## 설치
 
 ```bash
