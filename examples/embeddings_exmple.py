@@ -1,8 +1,12 @@
 import os
+import sys
 import json
 from datetime import datetime
 from openai import OpenAI
 from dotenv import load_dotenv
+
+# 프로젝트 루트를 Python 경로에 추가
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Upstage 유틸리티 함수 import
 from upstage.embeddings import (
@@ -11,7 +15,7 @@ from upstage.embeddings import (
 )
 
 # 데이터 파일 경로
-DATA_PATH = "data/embeddings/data_002.json"
+DATA_PATH = "data/embeddings/data_001.json"
 
 
 def load_data(data_path):
@@ -49,7 +53,9 @@ def save_results(query_results, timestamp):
     Returns:
         list: 저장된 파일 경로 리스트
     """
-    os.makedirs("result/embeddings", exist_ok=True)
+    # 타임스탬프별로 폴더 생성
+    result_dir = f"result/embeddings/{timestamp}"
+    os.makedirs(result_dir, exist_ok=True)
 
     saved_files = []
     for query_idx, result in enumerate(query_results):
@@ -57,7 +63,7 @@ def save_results(query_results, timestamp):
         similarities = result['similarities']
 
         # 파일명 생성
-        result_file = f"result/embeddings/query_{query_idx + 1}_{timestamp}.md"
+        result_file = f"{result_dir}/query_{query_idx + 1}.md"
 
         # Markdown 내용 생성
         markdown_content = f"""# 질문: {query}
