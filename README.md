@@ -25,3 +25,5 @@ UPSTAGE_API_KEY=your_actual_api_key_here
 ## Universal Extraction
 
 ## Embeddings
+API 페이지 : https://console.upstage.ai/docs/capabilities/embed
+설명 : https://uichan8.notion.site/upstage-solar-embedding?source=copy_link
