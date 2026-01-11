@@ -1,5 +1,3 @@
-"""Upstage Solar Embeddings 유틸리티 함수"""
-
 import numpy as np
 
 

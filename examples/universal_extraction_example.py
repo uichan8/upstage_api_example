@@ -122,72 +122,23 @@ def main():
         base_url="https://api.upstage.ai/v1/information-extraction"
     )
 
-    print("=" * 80)
-    print("Upstage Document Parsing - 문서 정보 추출")
-    print("=" * 80)
-    print()
-
-    # 1. 스키마 로드
-    print("스키마 로드 중...")
-    print(f"- 스키마 파일: {args.schema}")
-
+    # 스키마 로드
     if not os.path.exists(args.schema):
-        print(f"✗ 오류: 스키마 파일이 존재하지 않습니다: {args.schema}")
         return
 
     schema = load_schema(args.schema)
-    print(f"✓ 스키마 로드 완료")
-    print()
 
-    # 2. 이미지 소스 확인
-    print("이미지 소스 확인 중...")
-    print(f"- 이미지 소스: {args.image}")
-
-    # URL 여부 확인
+    # 이미지 소스 확인
     is_url = args.image.startswith('http://') or args.image.startswith('https://')
+    if not is_url and not os.path.exists(args.image):
+        return
 
-    if is_url:
-        print(f"✓ URL 이미지 감지")
-    else:
-        if not os.path.exists(args.image):
-            print(f"✗ 오류: 이미지 파일이 존재하지 않습니다: {args.image}")
-            return
-        print(f"✓ 로컬 이미지 파일 확인 완료")
-    print()
-
-    # 3. 문서 정보 추출
-    print("=" * 80)
-    print("문서 정보 추출 중...")
-    print("=" * 80)
-
+    # 문서 정보 추출
     result = universal_extraction_from_img(client, args.image, schema)
 
-    print("✓ 정보 추출 완료")
-    print()
-
-    # 4. 결과 출력
-    print("=" * 80)
-    print("추출된 데이터:")
-    print("=" * 80)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
-    print()
-
-    # 5. 결과 저장
-    print("=" * 80)
-    print("결과 저장 중...")
-    print("=" * 80)
-
+    # 결과 저장
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     json_path, markdown_path, image_save_path = save_result(result, timestamp, args.image)
-
-    print(f"✓ JSON 결과 저장: {json_path}")
-    print(f"✓ Markdown 결과 저장: {markdown_path}")
-    print(f"✓ 이미지 저장: {image_save_path}")
-    print()
-
-    print("=" * 80)
-    print("모든 작업 완료!")
-    print("=" * 80)
 
 
 if __name__ == "__main__":

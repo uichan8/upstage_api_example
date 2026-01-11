@@ -69,6 +69,7 @@ def universal_extraction_from_img(client, image_source, schema, model="informati
     # extra_body 설정
     extra_body = {
         "confidence": True,
+        "location": True,
         "mode": "enhanced" if enhanced else "standard"
     }
 
@@ -92,5 +93,14 @@ def universal_extraction_from_img(client, image_source, schema, model="informati
         extra_body=extra_body
     )
 
-    # 결과 JSON 파싱 및 반환
-    return json.loads(response.choices[0].message.content)
+    # 결과 파싱
+    # confidence와 coordinates 정보는 tool_calls에 있음
+    message = response.choices[0].message
+
+    if message.tool_calls and len(message.tool_calls) > 0:
+        # tool_calls[0].function.arguments에 전체 정보가 있음
+        full_result = json.loads(message.tool_calls[0].function.arguments)
+        return full_result
+    else:
+        # tool_calls가 없으면 content만 반환 (표준 모드)
+        return json.loads(message.content)
